@@ -1,0 +1,18 @@
+sysctlImage:
+  enabled: true
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      install_packages systemd
+      sysctl -w net.core.somaxconn=10000
+      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
+  mountHostSys: true
+redis:
+  config:
+    min-slaves-to-write: 1
+    repl-timeout: '60'
+    client-output-buffer-limit: 'slave 0 0 0'
+sentinel:
+  config:
+    down-after-milliseconds: 30000
